@@ -54,7 +54,7 @@ function preset(context, opts) {
 
   return {
     comments: false,
-    compact: env === 'production',
+    compact: true,
     presets: [
       // Latest stable ECMAScript features
       [require.resolve('babel-preset-latest'), {
