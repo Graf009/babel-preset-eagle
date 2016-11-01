@@ -1,0 +1,24 @@
+### OSX ###
+.DS_Store
+
+### Intellij ###
+*.iml
+.idea
+
+### Node ###
+*.log*
+=*
+
+# Dependency directory
+node_modules
+
+### Docs ###
+styleguide
+
+### Project out directory ###
+/build
+/dist
+
+
+/webpack-assets.json
+/webpack-stats.json
