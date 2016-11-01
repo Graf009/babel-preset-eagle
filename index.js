@@ -31,13 +31,6 @@ function preset(context, opts) {
   // https://github.com/babel/babel/issues/4539
   // It’s also nice that we can enforce `NODE_ENV` being specified.
   var env = process.env.BABEL_ENV || process.env.NODE_ENV;
-  if (env !== 'development' && env !== 'test' && env !== 'production') {
-    throw new Error(
-      'Using `babel-preset-eagle` requires that you specify `NODE_ENV` or '+
-      '`BABEL_ENV` environment variables. Valid values are "development", ' +
-      '"test", and "production". Instead, received: ' + JSON.stringify(env) + '.'
-    );
-  }
 
   if (env === 'development' || env === 'test') {
     plugins.push.apply(plugins, [
