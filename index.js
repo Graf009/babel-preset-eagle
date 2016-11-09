@@ -4,28 +4,40 @@ var path = require('path');
 
 function preset(context, opts) {
   opts = opts || {};
+  var runtime = true;
+  var es2015 = {};
+
+  if (opts !== undefined) {
+    if (opts.runtime !== undefined) runtime = opts.runtime;
+    if (opts.es2015 !== undefined) es2015 = opts.es2015;
+  }
 
   var plugins = [
-      // export * as ns from 'mod'
-      require.resolve('babel-plugin-transform-export-extensions'),
-      // class { handleClick = () => { } }
-      require.resolve('babel-plugin-transform-class-properties'),
-      // { ...todo, completed: true }
-      require.resolve('babel-plugin-transform-object-rest-spread'),
-      // function* () { yield 42; yield 43; }
-      [require.resolve('babel-plugin-transform-regenerator'), {
-        // Async functions are converted to generators by babel-preset-latest
-        async: false
-      }],
-      // Polyfills the runtime needed for async/await and generators
+    // export * as ns from 'mod'
+    require.resolve('babel-plugin-transform-export-extensions'),
+    // class { handleClick = () => { } }
+    require.resolve('babel-plugin-transform-class-properties'),
+    // { ...todo, completed: true }
+    require.resolve('babel-plugin-transform-object-rest-spread'),
+    // function* () { yield 42; yield 43; }
+    [require.resolve('babel-plugin-transform-regenerator'), {
+      // Async functions are converted to generators by babel-preset-latest
+      async: false
+    }]
+  ];
+
+  if (runtime === true) {
+    // Polyfills the runtime needed for async/await, generators and helpers
+    plugins.push.apply(plugins, [
       [require.resolve('babel-plugin-transform-runtime'), {
-        helpers: false,
+        helpers: true,
         polyfill: false,
         regenerator: true,
         // Resolve the Babel runtime relative to the config.
         moduleName: path.dirname(require.resolve('babel-runtime/package'))
       }]
-    ];
+    ]);
+  }
 
   // We are not using `env` because it’s ignored in versions > babel-core@6.10.4:
   // https://github.com/babel/babel/issues/4539
@@ -57,12 +69,10 @@ function preset(context, opts) {
   }
 
   return {
-    comments: false,
-    compact: true,
     presets: [
       // Latest stable ECMAScript features
       [require.resolve('babel-preset-latest'), {
-        es2015: opts
+        es2015: es2015
       }],
       // JSX, Flow
       require.resolve('babel-preset-react')
